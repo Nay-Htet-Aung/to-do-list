@@ -1,131 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/all.min.css">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/all.min.css">
+  <title>Document</title>
 </head>
+
 <body>
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container" style="max-width:600px">
-          <a href="#" class="navbar-brand">
-            Todo <span class="badge bg-danger ms-1">0</span>
-          </a>
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a href="#" id="clear" class="nav-link">Clear</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-      <div class="container" style="max-width:600px">
-        <div class="input-group my-4">
-          <input type="text" class="form-control">
-          <button class="btn btn-dark">Add</button>
-        </div>
-        <ul id="todo" class="list-group"></ul>
-        <ul id="done" class="list-group opacity-50 mt-4"></ul>
-      </div>
-    
-      <script>
-        let data = getData();
-        data.map(item => createItem(item.text, item.done));
-    
-        function getData() {
-          return JSON.parse(localStorage.getItem("data")) || [];
-        }
-    
-        function saveData(text) {
-          let data = getData();
-          data.push({ text, done: false });
-          localStorage.setItem("data", JSON.stringify(data));
-        }
-    
-        function deleteData(text) {
-          let data = getData();
-          let result = data.filter(item => item.text != text);
-          localStorage.setItem("data", JSON.stringify(result));
-        }
-    
-        function checkData(text) {
-          let data = getData();
-          let result = data.map(item => {
-            if (item.text == text) item.done = true;
-            return item;
-          });
-    
-          localStorage.setItem("data", JSON.stringify(result));
-        }
-    
-        function clearData() {
-          let data = getData();
-          let result = data.filter(item => !item.done);
-          localStorage.setItem("data", JSON.stringify(result));
-        }
-    
-        document.querySelector("#clear").onclick = function () {
-          document.querySelector("#done").textContent = "";
-          clearData();
-        }
-    
-        function updateCount() {
-          document.querySelector(".badge").textContent =
-            document.querySelectorAll("#todo li").length;
-        }
-    
-        document.querySelector("button").onclick = function () {
-          let text = document.querySelector("input").value;
-          if (text == "") return false;
-    
-          createItem(text);
-          updateCount();
-          saveData(text);
-    
-          document.querySelector("input").value = "";
-          document.querySelector("input").focus();
-        }
-    
-        document.querySelector("input").onkeydown = function (e) {
-          if (e.key == "Enter") {
-            document.querySelector("button").onclick();
-          }
-        }
-    
-        function createItem(text, done = false) {
-          let li = document.createElement("li");
-          li.classList.add("list-group-item");
-          li.textContent = text;
-    
-          let del = document.createElement("a");
-          del.setAttribute("href", "#");
-          del.classList.add("fa-solid", "fa-trash", "text-danger", "float-end");
-          del.onclick = function () {
-            li.remove();
-            updateCount();
-            deleteData(text);
-          }
-          li.appendChild(del);
-    
-          let check = document.createElement("a");
-          check.setAttribute("href", "#");
-          check.classList.add("fa-solid", "fa-check", "float-start", "me-2");
-          check.onclick = function () {
-            document.querySelector("#done").appendChild(li);
-            check.remove();
-            updateCount();
-            checkData(text);
-          }
-    
-          if (!done) li.appendChild(check);
-    
-          if (done) {
-            document.querySelector("#done").appendChild(li);
-          } else {
-            document.querySelector("#todo").appendChild(li);
-          }
-        }
-      </script>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container" style="max-width: 600px;">
+      <a href="#" class="navbar-brand">
+        Todo List
+        <span class="badge bg-danger ms-2">0</span>
+      </a>
+    </div>
+
+  </nav>
+  <div class="container" style="max-width: 600px;">
+    <div class="input-group my-4">
+      <input type="text" class="form-control">
+      <button class="btn btn-dark" id="add">Add</button>
+      <button class="btn btn-warning ms-2" id="clear">Clear Checked List</button>
+    </div>
+    <ul id="todo" class="list-group"></ul>
+    <ul id="done" class="list-group mt-4 opacity-50"></ul>
+  </div>
+
+  <script src="./js/script.js"></script>
 </body>
+
 </html>
